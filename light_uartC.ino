@@ -46,9 +46,9 @@ void setup() {
 }
 
 void loop() {
-  for (int i = 0; Serial.available(); i++) {
+  for (int i = 0; Serial1.available(); i++) {
     delay(2);
-    rgb[i] = Serial.read();
+    rgb[i] = Serial1.read();
   }
 
   if (rgb[0] == -1) {

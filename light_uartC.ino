@@ -8,96 +8,118 @@
 #define IRQ_PIN 3
 CRGB leds[NUM_LEDS];
 
-char input;
-bool irq_received = false;
+char r, g, b, mode, stringy[5];
+bool irq_flag = false, direction = true, isToBeTurnedOn = true;
 int i;
-String numberInputted;
 
-int rgb[] = {0, 1, 2, 3, 4, 5, 6};
-          //First 0 = Pattern
-
-void emitStaticColour(int r, int g, int b) {
+void emitStaticColourAll(int r, int g, int b, int brightness) {
   for (int i = 0; i != 20; i++) {
     leds[i] = CRGB(r, g, b);
     }
-  FastLED.show();
+  FastLED.show(brightness);
 }
 
-void flashingLights(int r, int g, int b) {
-  while (irq_received != true) {
-    Serial.println("aaa");
-    emitStaticColour(r, g, b);
-    delay(500);
-    emitStaticColour(0, 0, 0);
-    delay(500);
-  }
-  rgb[0] = -5; 
-}
-
-void emitAlternatingColour(int r, int g, int b, int r2, int g2, int b2) {
-  while (irq_received != true) {
-    emitStaticColour(r, g, b);
-    delay(1000);
-    emitStaticColour(r2, g2, b2);
-    delay(1000);
-  }
-
-  rgb[0] = -5;
-
+void emitStaticColour(int r, int g, int b, int brightness, int ledIndex) {
+  leds[ledIndex] = CRGB(r, g, b);
+  FastLED.show(brightness);
 }
 
 void interrupt() {
-  irq_received = true;
+  irq_flag = true;
 }
 
 void setup() {
   delay(2000);
-  Serial.begin(9600);
-  delay(200);
-  Serial1.begin(4800, SERIAL_8N1);
-  Serial.println("SERIAL1_TX: " + String(SERIAL1_TX));
-  Serial.println("SERIAL1_RX: " + String(SERIAL1_RX));
- // pinMode(IRQ_PIN, INPUT_PULLDOWN);
+  //Serial.begin(9600); //computer connection
+  //delay(200);
+  Serial1.begin(4800, SERIAL_8N1); //pico connection
+  //Serial.println("SERIAL1_TX: " + String(SERIAL1_TX));
+  //Serial.println("SERIAL1_RX: " + String(SERIAL1_RX));
+  pinMode(IRQ_PIN, INPUT_PULLDOWN);
   attachInterrupt(digitalPinToInterrupt(IRQ_PIN), interrupt, RISING);
   FastLED.addLeds<WS2812, LED_PIN, GRB>(leds, NUM_LEDS);
-  emitStaticColour(0, 0, 0);
+  emitStaticColourAll(0, 0, 0, 0);
 }
 
 void loop() {
-  while (Serial1.available()) {
-    input = Serial1.read();
-    if (input == 32 || input == 44 || input == 46) {
-      rgb[i] = numberInputted.toInt();
-      i++;
-      numberInputted = "";
-      continue;
+  if (Serial1.available() >= 4) {
+    irq_flag = false;
+    mode = Serial1.read();
+    r = Serial1.read();
+    g = Serial1.read();
+    b = Serial1.read();
+
+    //sprintf(stringy, "%d", mode);
+    //Serial.println(stringy);            
+
+    if (mode == 1) {
+      emitStaticColourAll(0, 0, 0, 0);
+      emitStaticColourAll(r, g, b, 100);
     }
-    numberInputted += input;
-  }
 
-  if (rgb[0] == 0) {
-    emitStaticColour(rgb[1], rgb[2], rgb[3]);
-    i = 0;
-  }
+    else if (mode == 2) {
+      emitStaticColourAll(0, 0, 0, 0);
+      while (irq_flag == false) {
+        emitStaticColourAll(r, g, b, 100);
+        delay(500);
+        emitStaticColourAll(0, 0, 0, 100);
+        delay(500);
+      }
+    }
 
-  else if (rgb[0] == 1) {
-    irq_received = false;
-    flashingLights(rgb[1], rgb[2], rgb[3]);
-    i = 0;
-    irq_received = false;
-  }
+    else if (mode == 3) {
+      i = 0;
+      emitStaticColourAll(0, 0, 0, 0);
+      while (irq_flag == false) {
+        i = (direction == true) ? (i + 1) : (i - 1);
+        emitStaticColourAll(i, 0, 255 - i, 100);
+        delay(30);
+        if (i == 255) {
+          direction = false;
+        }
+        else if (i == 0) {
+          direction = true;
+        }
+      }
+    }
 
-  else if (rgb[0] == 2) {
-    emitAlternatingColour(rgb[1], rgb[2], rgb[3], rgb[4], rgb[5], rgb[6]);
-    i = 0;
-    irq_received = false;
-  }
+    else if (mode == 4) {
+      i = 0;
+      emitStaticColourAll(0, 0, 0, 0);
+      while (irq_flag == false) {
+        i = (direction == true) ? (i + 1) : (i - 1);
+        emitStaticColourAll(r, g, b, i);
+        delay(10);
+        if (i == 255) {
+          direction = false;
+        }
+        else if (i == 0) {
+          direction = true;
+        }
+      }
+    }
 
-  else if (rgb[0] == -1) {
-    emitStaticColour(0, 0, 0);
-    exit(0);
-  }
+    else if (mode == 5) {
+      i = 0;
+      emitStaticColourAll(0, 0, 0, 0);      
+      while (irq_flag == false) {
+        if (isToBeTurnedOn == true) {
+          emitStaticColour(r, g, b, 100, i);
+        }
+        else {
+          emitStaticColour(0, 0, 0, 100, i);
+        }
+        delay(100);
+        if (i == 20) {
+          isToBeTurnedOn = !(isToBeTurnedOn);
+          i = 0;
+        }
+        else {
+          i++;
+        }  
+        
 
+        }
+      }
+  }
 }
-
-

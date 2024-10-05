@@ -6,26 +6,31 @@ package frc.robot.commands;
 
 import frc.robot.subsystems.LEDSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.PicoLEDModule;
 
 /** An example command that uses an example subsystem. */
-public class ExampleCommand extends Command {
+public class sendMessage extends Command {
+  private PicoLEDModule m_pico;
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final LEDSubsystem m_subsystem;
+  
+
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ExampleCommand(LEDSubsystem subsystem) {
-    m_subsystem = subsystem;
+  public sendMessage(PicoLEDModule pico) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(subsystem);
+    m_pico = pico;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    System.out.println("button received");
+    m_pico.skibidi_sigma();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override

@@ -15,7 +15,7 @@ public class LEDSubsystem extends SubsystemBase {
   public LEDSubsystem() {}
 
 
-  SerialPort UART = new SerialPort(9600, Port.kUSB1);
+  SerialPort UART = new SerialPort(4800, Port.kMXP);
   /**
    * Example command factory method.
    *

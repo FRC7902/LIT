@@ -5,3 +5,5 @@ Currently, the communication protocol being used is UART, however it may change 
 The current file is programmed in C++ via the Arduino IDE. There exists a Micropython version, however, this version is now deprecated and will only be used for debugging purposes.
 
 WS2812.py driver provided by SunFounder (currently unused).
+
+Thank you Davis for all your help :)

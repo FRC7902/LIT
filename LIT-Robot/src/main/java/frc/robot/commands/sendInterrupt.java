@@ -8,32 +8,32 @@ import frc.robot.subsystems.LEDSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.PicoLEDModule;
 
-public class sendMessage extends Command {
+/** An example command that uses an example subsystem. */
+public class sendInterrupt extends Command {
   private PicoLEDModule m_pico;
   private int mode, r, g, b;
+  private boolean interruptValue;
 
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   
+
+
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-
-  public sendMessage(PicoLEDModule pico) {
+  public sendInterrupt(PicoLEDModule pico, boolean pinValue) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_pico = pico;
+    interruptValue = pinValue;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    //System.out.println("button received");
-    int mode = 1, 
-        r = 0, 
-        g = 255, 
-        b = 255;
-    m_pico.skibidi_sigma(mode, r, g, b);
+    m_pico.interrupt(interruptValue);
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.

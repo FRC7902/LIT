@@ -1,59 +1,16 @@
 package frc.robot;
 
-import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.locks.ReentrantLock;
-
-import edu.wpi.first.hal.HAL;
 import edu.wpi.first.hal.SerialPortJNI;
-import edu.wpi.first.hal.FRCNetComm.tResourceType;
-import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DigitalOutput;
 
 public class PicoLEDModule implements AutoCloseable {
-  private double lastReadTime;
   private final Thread readThread;
   private final AtomicBoolean threadRunning = new AtomicBoolean(true);
-  int port = SerialPortJNI.serialInitializePort((byte)1);
+  private int port = SerialPortJNI.serialInitializePort((byte)1);
+  private DigitalOutput interrupt = new DigitalOutput(0);
 
-  public static class RawColor {
-    public RawColor(int r, int g, int b, int _ir) {
-      red = r;
-      green = g;
-      blue = b;
-      ir = _ir;
-    }
-
-    public RawColor() {
-    }
-
-    public int red;
-    public int green;
-    public int blue;
-    public int ir;
-  }
-
-  private static class SingleCharSequence implements CharSequence {
-    public byte[] data;
-
-    @Override
-    public int length() {
-      return data.length;
-    }
-
-    @Override
-    public char charAt(int index) {
-      return (char)data[index];
-    }
-
-    @Override
-    public CharSequence subSequence(int start, int end) {
-      return new String(data, start, end, StandardCharsets.UTF_8);
-    }
-
-  }
-  
   public void threadMain() {   
-    // Using JNI for a non allocating read
     SerialPortJNI.serialSetBaudRate(port, 4800);
     SerialPortJNI.serialSetDataBits(port, (byte)8);
     SerialPortJNI.serialSetParity(port, (byte)0);
@@ -63,26 +20,24 @@ public class PicoLEDModule implements AutoCloseable {
     SerialPortJNI.serialSetWriteMode(port, (byte)1);
   }
 
-  public void skibidi_sigma() {
+  public void interrupt(boolean pinValue) {
+    interrupt.set(pinValue);
+  }
 
-//    HAL.report(tResourceType.kResourceType_SerialPort, 2);
-    
-    System.out.println("skibidi " + port);
-
-    byte[] command = {(byte) 3, (byte) 255, (byte) 255, (byte) 255};
-
+  public void skibidi_sigma(int mode, int r, int g, int b) {
+    final byte[] command = {(byte) mode, (byte) r, (byte) g, (byte) b};
+    SerialPortJNI.serialInitializePort((byte)1);
+  //HAL.report(tResourceType.kResourceType_SerialPort, 2);
+  //System.out.println("skibidi " + port);
     SerialPortJNI.serialWrite(port, command, 4);
-    
-    //SerialPortJNI.serialClose(port);
+    SerialPortJNI.serialClose(port);
   }
   
-
   public PicoLEDModule() {
     readThread = new Thread(this::threadMain);
     readThread.setName("PicoColourController");
     readThread.start();
   }
-
 
   @Override
   public void close() throws Exception {

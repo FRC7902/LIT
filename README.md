@@ -1,24 +1,27 @@
-**FRC 7902 LED Light Strip Program**
-
-This program allows the RIO to communicate with a Raspberry Pi Pico, which outputs a colour/effect to the LED strip connected to the Raspberry Pi Pico.
-
-
-A command is sent in this order (do not have any spaces in the input):
+# **FRC 7902 LED Light Strip Program** #
+<br />
+This program allows the RIO to communicate with a Raspberry Pi Pico, which outputs a colour/effect to the LED strip connected to the Raspberry Pi Pico.<br />
+<br />
+A command is sent in this order (do not have any spaces in the input):<br />
 1,2,3,4,5
-
+<br />
+<br />
 1: Brightness (from 0 - 255)
-2: Mode (from 1 - 5)
-3: R (Red value)
-4: G (Green value)
-5: B (Blue value)
+<br />
+2: Mode (from 1 - 5)<br />
+3: R (Red value)<br />
+4: G (Green value)<br />
+5: B (Blue value)<br />
+<br />
+<br />
+# **Modes**:
+<br />
+1: Static Lights<br />
+2: Flashing Lights<br />
+3: Rainbow Lights<br />
+4: Fading Lights<br />
+5: Pattern Lights (I don't know what to properly call this one)<br />
 
-
-**Modes**:
-1: Static Lights
-2: Flashing Lights
-3: Rainbow Lights
-4: Fading Lights
-5: Pattern Lights (I don't know what to properly call this one) 
 
 
 NOTE:

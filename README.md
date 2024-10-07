@@ -3,28 +3,46 @@
 This program allows the RIO to communicate with a Raspberry Pi Pico, which outputs a colour/effect to the LED strip connected to the Raspberry Pi Pico.<br />
 <br />
 A command is sent in this order (do not have any spaces in the input):<br />
-1,2,3,4,5
+
+**1,2,3,4,5**
 <br />
 <br />
-1: Brightness (from 0 - 255)
+
+**1: Brightness** (from 0 - 255)
 <br />
-2: Mode (from 1 - 5)<br />
-3: R (Red value)<br />
-4: G (Green value)<br />
-5: B (Blue value)<br />
+
+**2: Mode** (from 1 - 5)
+<br />
+
+**3: R** (Red value)
+<br />
+
+**4: G** (Green value)
+<br />
+
+**5: B** (Blue value)
 <br />
 <br />
-# **Modes**:
+
+# **Modes**: #
+1: **Static Lights**
 <br />
-1: Static Lights<br />
-2: Flashing Lights<br />
-3: Rainbow Lights<br />
-4: Fading Lights<br />
-5: Pattern Lights (I don't know what to properly call this one)<br />
+
+2: **Flashing Lights**
+<br />
+
+3: **Rainbow Lights**
+<br />
+
+4: **Fading Lights**
+<br />
+
+5: **Pattern Lights** (I don't know what to properly call this one)<br />
+
+<br />
 
 
-
-NOTE:
+**NOTE:**
 - Current communication protocol used: **UART**
 - Please only use the Arduino file of the program (light_uartC.ino). 
 - To turn off all lights, only input 0.
@@ -34,15 +52,28 @@ NOTE:
   1. Rainbow Lights
   2. Fading Lights
   3. Pattern Lights
+<br />
 
+# **System Information** #
+<br />
 
-**System Information**
 Microcontroller: Raspberry Pi Pico (RP2040)
+<br />
+
 Language: C++ (Arduino version)
+<br />
+
 Receive Pin (UART) = DIO 1
+<br />
+
 LED DATA Pin = DIO 2
+<br />
+
 IRQ Pin = DIO 3
+<br />
+
 Baud rate = 300
+<br />
 
 
 **Thank you Davis and Arjun for all your help :)**

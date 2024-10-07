@@ -11,7 +11,7 @@ public class PicoLEDModule implements AutoCloseable {
   private DigitalOutput interrupt = new DigitalOutput(0);
 
   public void threadMain() {   
-    SerialPortJNI.serialSetBaudRate(port, 4800);
+    SerialPortJNI.serialSetBaudRate(port, 300);
     SerialPortJNI.serialSetDataBits(port, (byte)8);
     SerialPortJNI.serialSetParity(port, (byte)0);
     SerialPortJNI.serialSetStopBits(port, (byte)10);

@@ -41,10 +41,10 @@ void rainbowLights(int brightness) {
     i = (direction == true) ? (i + 1) : (i - 1);
     emitStaticColourAll(i, 0, 255 - i, brightness);
     delay(30);
-    if (i == 255) {
+    if (i == 253) {
       direction = false;
     }
-    else if (i == 0) {
+    else if (i == 3) {
       direction = true;
     }
   }

@@ -10,7 +10,7 @@ import frc.robot.PicoLEDModule;
 
 public class sendMessage extends Command {
   private PicoLEDModule m_pico;
-  private int mode, r, g, b;
+  private int brightness, mode, r, g, b;
 
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   
@@ -20,20 +20,22 @@ public class sendMessage extends Command {
    * @param subsystem The subsystem used by this command.
    */
 
-  public sendMessage(PicoLEDModule pico) {
+  public sendMessage(PicoLEDModule pico, int brightness_inp, int mode_inp, int r_inp, int g_inp, int b_inp) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_pico = pico;
+    brightness = brightness_inp;
+    mode = mode_inp;
+    r = r_inp;
+    g = g_inp;
+    b = b_inp;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     //System.out.println("button received");
-    int mode = 1, 
-        r = 0, 
-        g = 255, 
-        b = 255;
-    m_pico.skibidi_sigma(mode, r, g, b);
+
+    m_pico.skibidi_sigma(brightness, mode, r, g, b);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

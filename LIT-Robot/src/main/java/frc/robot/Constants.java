@@ -16,4 +16,10 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
+  public static class LightConstants {
+    public static final int baudRate = 300;
+    public static final int dioPin = 0;
+    public static final int bufferSize = 64;
+  }
 }
+

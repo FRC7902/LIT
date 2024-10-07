@@ -27,9 +27,9 @@ void emitStaticColour(int r, int g, int b, int brightness, int ledIndex) {
 void flashingLights(int r, int g, int b, int brightness) {
   emitStaticColourAll(0, 0, 0, 0);
   while (irq_flag == false) {
-    emitStaticColourAll(r, g, b, 100);
+    emitStaticColourAll(r, g, b, brightness);
     delay(500);
-    emitStaticColourAll(0, 0, 0, 100);
+    emitStaticColourAll(0, 0, 0, 0);
     delay(500);
   }
 }
@@ -39,7 +39,7 @@ void rainbowLights(int brightness) {
   emitStaticColourAll(0, 0, 0, 0);
   while (irq_flag == false) {
     i = (direction == true) ? (i + 1) : (i - 1);
-    emitStaticColourAll(i, 0, 255 - i, 100);
+    emitStaticColourAll(i, 0, 255 - i, brightness);
     delay(30);
     if (i == 255) {
       direction = false;

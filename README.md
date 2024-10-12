@@ -44,14 +44,11 @@ A command is sent in this order (do not have any spaces in the input):<br />
 
 **NOTE:**
 - Current communication protocol used: **UART**
-- Please only use the Arduino file of the program (light_uartC.ino). 
-- To turn off all lights, only input 0.
-- Rainbow Lights do not need RGB values. You can just input the brightness value and the mode (which would be 3).
-- Some modes will not be affected by the brightness values. These modes are:
-  
-  1. Rainbow Lights
-  2. Fading Lights
-  3. Pattern Lights
+- You can either use the C or the Arduino file. Both files are functional. 
+- To turn off all lights, input 0,1,0,0,0.
+- Rainbow Lights are not affected by RGB values, however, you still need to input the RGB values (just put 0 for each). This ensures the buffer gets the right amount of data.
+- Brightness is a W.I.P as of now.
+- 
 <br />
 
 # **System Information** #
@@ -60,13 +57,13 @@ A command is sent in this order (do not have any spaces in the input):<br />
 Microcontroller: Raspberry Pi Pico (RP2040)
 <br />
 
-Language: C++ (Arduino version)
+Language: C / C++ (Arduino version)
 <br />
 
 Receive Pin (UART) = DIO 1
 <br />
 
-LED DATA Pin = DIO 2
+LED TX Pin = DIO 2
 <br />
 
 IRQ Pin = DIO 3

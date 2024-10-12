@@ -106,13 +106,12 @@ void rainbowLights(double r, double g, double b, int brightness) {
 
     }
 
-    sleep_ms(25);
     emitStaticColourAll(r, g, b, brightness);
+    sleep_ms(25);
 
-    sprintf(stringy, "%d", step);
-    printf(stringy);
-    printf("\nR:\n\n");
-
+            sprintf(stringy, "%d", step);
+            printf(stringy);
+            printf("\nR:\n\n");
     if (i >= 3.4) {
       if (step == 3 && direction == true) {
         direction = false;
@@ -134,22 +133,34 @@ void rainbowLights(double r, double g, double b, int brightness) {
   }
 }
 
-
 void fadingLights(int r, int g, int b, int brightness) {
+  i = 0;
   direction = true;
-  for (i = 0; irq_flag != true;) {
-    i = (direction == true) ? (i + 0.01) : (i - 0.01);
-    r = (r == 0) ? (r) : (direction == true) ? (r - i) : (r + i);
-    g = (g == 0) ? (g) : (direction == true) ? (g - i) : (g + i);
-    b = (b == 0) ? (b) : (direction == true) ? (b - i) : (b + i);
-    emitStaticColourAll(r, g, b, 100);
-    if (i >= 1.7 && direction == true) {
+  while (irq_flag == false) {
+            sprintf(stringy, "%d", r);
+            printf(stringy);
+            printf("\nR:\n\n");        
+    if (direction == true) {
+      i++;
+      r = (r == 0) ? (r) : (r - 1);
+      g = (g == 0) ? (g) : (g - 1);
+      b = (b == 0) ? (b) : (b - 1);
+    }
+    else if (direction == false) {
+      i--;
+      r = (r == 0) ? (r) : (r + 1);
+      g = (g == 0) ? (g) : (g + 1);
+      b = (b == 0) ? (b) : (b + 1);
+    }
+
+    emitStaticColourAll(r, g, b, i);
+    sleep_ms(5);
+    if (i == 250) {
       direction = false;
     }
-    else if (i == 0.01) {
+    else if (i == 1) {
       direction = true;
-    } 
-    sleep_ms(10);
+    }
   }
 }
 

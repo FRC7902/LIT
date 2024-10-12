@@ -25,8 +25,8 @@ uint8_t b;
 
 int mode, brightness, r, g, b, NUM_PIXELS = 20, stringy[5];
 bool irq_flag = false, direction = true, isToBeTurnedOn = true;
-int bytes_transmitted;
-float i;
+int bytes_transmitted, initialise;
+float i, e, constant;
 uint32_t colour_set;
 
 static inline void put_pixel(uint32_t pixel_grb) {
@@ -47,12 +47,44 @@ void emitStaticColourAll(double r, double g, double b, double brightness) {
 }
 
 void emitStaticColour(double r, double g, double b, double brightness, int ledIndex) {
-    for (int g = ledIndex; g != 0 || g != 20; g--) {
-      put_pixel(colour_set);
+  sprintf(stringy, "%d", ledIndex);
+  printf(stringy);
+  printf("\nR:\n\n");
+
+  if (isToBeTurnedOn == true) {
+    for (int c = ledIndex; c >= 0; c--) {
+      if (c == 0) {
+        colour_set = urgb_u32((r), (g), (b));
+        put_pixel(colour_set);
+      }
+      else {
+        colour_set = urgb_u32((0), (0), (0));
+        put_pixel(colour_set);
+      }
     }
-    colour_set = urgb_u32((r), (g), (b));
-    put_pixel(colour_set);
+  }
+  else if (isToBeTurnedOn == false) {
+    for (int c = 0; c <= ledIndex + 1; c++) {
+      if (c == (ledIndex - 1)) {
+        colour_set = urgb_u32((r), (g), (b));
+        put_pixel(colour_set);
+
+      }
+      else {
+        colour_set = urgb_u32((0), (0), (0));
+        put_pixel(colour_set);
+      }
+    }
+  }
 }
+
+void turnOffAllLights() {
+  colour_set = urgb_u32((0), (0), (0));
+  for (int x = 0; x < 60; x++) {
+    put_pixel(colour_set);
+  }
+}  
+
 
 void flashingLights(int r, int g, int b, int brightness) {
   while (irq_flag == false) {
@@ -64,6 +96,7 @@ void flashingLights(int r, int g, int b, int brightness) {
 }
 
 void rainbowLights(double r, double g, double b, int brightness) {
+  constant = 0.3;
   i = 0.2;
   r = 255.0;
   g = 255.0;
@@ -74,45 +107,48 @@ void rainbowLights(double r, double g, double b, int brightness) {
   while (irq_flag == false) {
     //i = (direction == true) ? (i + 0.02) : (i - 0.02);
     i += 0.01;
+    e += 0.02;
+
 
     if (step == 1) {
       if (direction == true) {
-        r -= i;
+        r-=constant;
       }
       else if (direction == false) {
-        r += i;
+        r+=constant;
       }
     }
     else if (step == 2) {
       if (direction == true) {
-        r += i;
-        g -= i;
+        r+=constant;
+        g-=constant;
       }
       else if (direction == false) {
-        r -= i;
-        g += i;
+        r-=constant;
+        g+=constant;
       }
     }
 
     else if (step == 3) {
       if (direction == true) {
-        g += i;
-        b -= i;
+        g+=constant;
+        b-=constant;
       }
       else if (direction == false) {
-        g -= i;
-        b += i;
+        g-=constant;
+        b+=constant;
       }
 
     }
 
     emitStaticColourAll(r, g, b, brightness);
-    sleep_ms(25);
+    sleep_ms(3);
 
-            sprintf(stringy, "%d", step);
-            printf(stringy);
-            printf("\nR:\n\n");
-    if (i >= 3.4) {
+    sprintf(stringy, "%f", r);
+    printf(stringy);
+    printf("\nR:\n\n");
+
+    if (i >= 14) {
       if (step == 3 && direction == true) {
         direction = false;
         step++;
@@ -154,7 +190,7 @@ void fadingLights(int r, int g, int b, int brightness) {
     }
 
     emitStaticColourAll(r, g, b, i);
-    sleep_ms(5);
+    sleep_ms(2);
     if (i == 250) {
       direction = false;
     }
@@ -166,14 +202,22 @@ void fadingLights(int r, int g, int b, int brightness) {
 
 void patternLights(int r, int g, int b, int brightness) {
   i = 0;
+  
+  turnOffAllLights();
   while (irq_flag == false) {
     emitStaticColour(r, g, b, brightness, i);
-    sleep_ms(100);
-    if (i == 20) {
-      isToBeTurnedOn = !(isToBeTurnedOn);
-      i = 0;
+    sleep_ms(50);
+    if (i == NUM_PIXELS) {
+      isToBeTurnedOn = false;
     }
-    else {
+    else if (i == 0 && isToBeTurnedOn == false) {
+      isToBeTurnedOn = true;
+    }
+
+    if (isToBeTurnedOn == false) {
+      i--;
+    }
+    else if (isToBeTurnedOn == true) {
       i++;
     }  
   }

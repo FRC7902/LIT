@@ -1,4 +1,4 @@
-# **FRC 7902 LED Light Strip Program** #
+# **THIS BRANCH CONTAINS UNTESTED AND POTENTIALLY PROBLEMATIC CODE** #
 <br />
 This program allows the RIO to communicate with a Raspberry Pi Pico, which outputs a colour/effect to the LED strip connected to the Raspberry Pi Pico.<br />
 <br />

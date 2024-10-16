@@ -7,15 +7,25 @@
 #define WS2812_PIN 2
 #define IRQ_PIN 3
 
-int mode, brightness, step, stringy[5];
-bool irq_flag = false, direction = true;
-float i, r, g, b;
-int NUM_PIXELS = 20;
+int mode, 
+    brightness, 
+    step, 
+    stringy[5],
+    NUM_PIXELS = 20;
+
+bool irq_flag = false,
+     direction = true;
+
+float i,
+      r, 
+      g, 
+      b;
+ 
 uint32_t colour_set;
 
-
-
 float rainbowLightConstant = 0.3;
+
+int rainbowLightComparison = 14;
 
 int flashingLightDelay = 500,
     rainbowLightDelay = 3,

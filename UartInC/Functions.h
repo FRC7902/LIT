@@ -37,6 +37,21 @@ float getInput(int variableType) {
   }
 }
 
+void resetVariables() {
+    irq_flag = false, direction = true;
+    brightness = getInput(2);
+    mode = getInput(1);
+    r = getInput(2);
+    g = getInput(2);
+    b = getInput(2);
+
+    printVariables(brightness, "Brightness");
+    printVariables(mode, "Mode");
+    printVariables(r, "R");
+    printVariables(g, "G");
+    printVariables(b, "B");
+}
+
 void printVariables(float x, char name[]) {
   sprintf(stringy, "%f", x);
   printf(stringy);

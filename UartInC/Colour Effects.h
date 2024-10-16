@@ -88,7 +88,7 @@ void rainbowLights(int brightness) {
     }
     emitStaticColourAll(r, g, b, brightness);
     sleep_ms(rainbowLightDelay);
-    if (i >= 14) {
+    if (i >= rainbowLightComparison) {
       if (step == 3 && direction == true) {
         direction = false;
         step++;

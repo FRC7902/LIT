@@ -10,12 +10,8 @@ void startProgram()
 {
   if (uart_is_readable(UART_ID))
   {
-    irq_flag = false, direction = true;
-    brightness = getInput(2);
-    mode = getInput(1);
-    r = getInput(2);
-    g = getInput(2);
-    b = getInput(2);
+
+    resetVariables();
 
     printVariables(brightness, "Brightness");
     printVariables(mode, "Mode");
@@ -23,41 +19,26 @@ void startProgram()
     printVariables(g, "G");
     printVariables(b, "B");
 
-    if (brightness == 0)
-    {
-      if (mode == 5)
-      {
-        turnOffAllLights();
-      }
-      else
-      {
-        emitStaticColourAll(0, 0, 0, 0);
-      }
-    }
+    switch (mode) {
+      case 1:
+        emitStaticColourAll(r, g, b, 100);
+        break;
 
-    else if (mode == 1)
-    {
-      emitStaticColourAll(r, g, b, 100);
-    }
+      case 2:
+        flashingLights(r, g, b, brightness);
+        break;
 
-    else if (mode == 2)
-    {
-      flashingLights(r, g, b, brightness);
-    }
+      case 3:
+        rainbowLights(brightness);
+        break;
 
-    else if (mode == 3)
-    {
-      rainbowLights(brightness);
-    }
+      case 4:
+        fadingLights(r, g, b, brightness);
+        break;
 
-    else if (mode == 4)
-    {
-      fadingLights(r, g, b, brightness);
-    }
-
-    else if (mode == 5)
-    {
-      patternLights(r, g, b, brightness);
+      case 5:
+        patternLights(r, g, b, brightness);
+        break;
     }
   }
 }
